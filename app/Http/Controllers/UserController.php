@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -40,6 +41,8 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password)
         ]);
+        alert('BERHASIL', 'User berhasil di tambah', 'success');
+
         return redirect()->to('user')->with('message', 'User berhasil di tambah ');
     }
 

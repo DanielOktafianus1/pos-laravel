@@ -9,7 +9,7 @@
     @endif
     <div class="table-responsive">
         <div align="right"><a href="{{ route('user.create') }}" class="btn btn-primary mb-3">Tambah</a></div>
-        <table class="table table-bordered">
+        <table class="table table-bordered" id="example1">
             <thead>
                 <tr>
                     <th>No</th>

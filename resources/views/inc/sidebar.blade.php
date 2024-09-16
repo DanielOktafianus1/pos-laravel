@@ -1,4 +1,5 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: rgba(174, 123, 99, 0.998); color:">
+<aside class="main-sidebar sidebar-dark-primary elevation-4"
+    style="background-image: linear-gradient(to bottom, rgb(6, 17, 81), rgb(172, 157, 234));">
     <!-- Brand Logo -->
     <a href="../../index3.html" class="brand-link">
         {{-- <img src="../../dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"

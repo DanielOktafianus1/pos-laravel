@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="{{ asset('adm/plugins/fontawesome-free/css/all.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adm/dist/css/adminlte.min.css') }}">
+
+    <link rel="stylesheet" href="{{ asset('adm/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adm/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('adm/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -48,6 +53,7 @@
 
                 <!-- Default box -->
                 <div class="card">
+                    @include('sweetalert::alert')
                     <div class="card-header">
                         <h3 class="card-title">@yield('title')</h3>
 
@@ -65,7 +71,7 @@
                     </div>
                     <!-- /.card-body -->
                     <div class="card-footer">
-                        &copy;anjay
+                        &copy; Inimart
                     </div>
                     <!-- /.card-footer-->
                 </div>
@@ -92,6 +98,7 @@
     </div>
     <!-- ./wrapper -->
 
+
     <!-- jQuery -->
     <script src="{{ asset('adm/plugins/jquery/jquery.min.js') }}"></script>
     <!-- Bootstrap 4 -->
@@ -100,6 +107,20 @@
     <script src="{{ asset('adm/dist/js/adminlte.min.js') }}"></script>
     <!-- AdminLTE for demo purposes -->
     {{-- <script src="{{ asset('adm/dist/js/demo.js') }}"></script> --}}
+    @include('sweetalert::alert', ['cdn' => 'https://cdn.jsdelivr.net/npm/sweetalert2@9'])
+
+    <script src="{{ asset('adm/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/pdfmake/vfs_fonts.js') }}"></script>
+    <script src="{{ asset('adm/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('adm/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 
     <script>
         $('#category_id').change(function() {
@@ -164,13 +185,17 @@
 
             let newRow = "";
             newRow += "<tr>"
-            newRow += "<td>" + product_name + "</td>";
+            newRow += "<td>" + product_name + " <input type='hidden' name='product_id[]' value='" + product_id +
+                "'></td>";
             newRow += "<td> Rp. " + product_price.toLocaleString('id-ID') + ".00,-</td>";
-            newRow += "<td>" + product_qty + "</td>";
+            newRow += "<td>" + product_qty + "<input type='hidden' name='qty[]' value='" + product_qty + "'></td>";
             newRow += "<td> Rp. " + subTotal.toLocaleString('id-ID') +
-                ".00,- <input type='hidden' class='sub_total-val' value='" + subTotal + "'></td>";
+                ".00,- <input type='hidden' class='sub_total-val' name='sub_total[]' value='" + subTotal +
+                "'></td>";
             newRow += "<td></td>";
             newRow += "</td>"
+
+
 
             $('tbody').append(newRow);
 
@@ -183,6 +208,43 @@
             $('.total_price').text("Rp." +
                 total.toLocaleString('id-ID') +
                 ".00,-");
+
+            $('#total_price_val').val(total);
+
+            calculateChange()
+        });
+
+        function calculateChange() {
+            let total = parseFloat($('#total_price_val').val() || 0),
+                dibayar = parseFloat($('#dibayar').val() || 0);
+            let kembali = dibayar - total;
+            $('#kembalian').val(kembali)
+            $('.kembalian_text').text(kembali.toLocaleString('id-ID'))
+
+        }
+
+
+        $('#dibayar').on('change keyup', function() {
+            calculateChange()
+
+        });
+
+        $(function() {
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
         });
     </script>
 </body>
